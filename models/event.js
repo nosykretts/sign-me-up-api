@@ -57,16 +57,17 @@ class EventModel {
 
   static createEvent(req, res, next) {
     req.body.logo = req.file.cloudStoragePublicUrl
-    let newEvent = new EventModel(req.body)
-    newEvent
-    .save()
-    .then(event => {
+    let newEvent = new Event(req.body)
+    newEvent.save()
+    .then(events => {
       res.status(200).json({
         message: 'Event successfully created',
-        data: event
+        data: events
       })
     })
-    .catch(err => next(boom.boomify(err)))
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   static updateEvent(req, res, next) {
@@ -98,7 +99,7 @@ class EventModel {
     .catch(err => next(boom.boomify(err)))
   }
 
-  deleteEvent(req, res, next) {
+  static deleteEvent(req, res, next) {
     Event.findByIdAndRemove(req.params.id)
     .then(event => {
       if (event) {
