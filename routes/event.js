@@ -1,17 +1,12 @@
-const router = require('express').Router()
+const express = require('express')
+const router = express.Router();
+const Image = require('../helper/imageHelper')
+const Event = require('../controllers/event')
 
-const {
-  getEvents,
-  getEvent,
-  createEvent,
-  updateEvent,
-  deleteEvent
-} = require('../controllers/event')
-
-router.get('/', getEvents)
-router.post('/', createEvent)
-router.get('/:id', getEvent)
-router.put('/:id', updateEvent)
-router.delete('/:id', deleteEvent)
+router.get('/', Event.getEvents)
+router.post('/add', Image.multer.single('imageFile'), Image.sendUploadToGCS, Event.createEvent)
+router.get('/:id', Event.getEvent)
+router.put('/edit/:id', Image.multer.single('imageFile'), Image.sendUploadToGCS, Event.updateEvent)
+router.delete('/:id', Event.deleteEvent)
 
 module.exports = router
